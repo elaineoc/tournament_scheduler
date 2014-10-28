@@ -5,8 +5,9 @@
 </head>
 <body>
 <div ng-controller="ScheduleController">
-  Number of players:<input type="number" ng-model="playerCount" placeholder="0">
+  Number of players:<input type="number" ng-model="playerCount" placeholder="0" ng-change="change()" max="90">
   Number of courts available:<input type="number" ng-model="courtCount" placeholder="0">
+  Max matches per team:<input type="number" ng-model="maxMatches">
   <br/>
   <button ng-click="generate()" class="button">Generate Schedule</button>
   <br/>

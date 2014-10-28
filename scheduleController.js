@@ -2,9 +2,13 @@ function ScheduleController($scope) {
   $scope.rounds = [];
   $scope.playerCount = 3;
   $scope.courtCount = 2;
+  $scope.maxMatches = $scope.playerCount - 1;
+  $scope.matchesPlayed = {};
 
   $scope.generate = function () {
     $scope.rounds = [];
+    $scope.matchesPlayed = {};
+
     var players = getPlayers();
     var matchesRemaining = calculateAllCombinations(players);
 
@@ -13,6 +17,10 @@ function ScheduleController($scope) {
       matchesRemaining = compact(matchesRemaining);
       $scope.rounds.push(currentMatches);
     }
+  }
+
+  $scope.change = function () {
+    $scope.maxMatches = $scope.playerCount - 1;
   }
 
   var getPlayers = function () {
@@ -29,6 +37,7 @@ function ScheduleController($scope) {
     var matchesRemaining = [];
 
     for (var playerIndex = 0; playerIndex < (players.length - 1); playerIndex++) {
+      $scope.matchesPlayed[playerIndex + 1] = 0;
       for (var next = playerIndex + 1; next < players.length; next++) {
         matchesRemaining.push([players[playerIndex], players[next]]);
       }
@@ -45,7 +54,11 @@ function ScheduleController($scope) {
       var nextMatch = matchesRemaining[matchesRemainingIndex];
 
       if (flatten(currentMatches).indexOf(nextMatch[0]) === -1 && flatten(currentMatches).indexOf(nextMatch[1]) === -1) {
-        currentMatches.push(nextMatch);
+        if ( !exceededMaxMatches(nextMatch[0]) && !exceededMaxMatches(nextMatch[1]) ) {
+          currentMatches.push(nextMatch);
+          $scope.matchesPlayed[nextMatch[0]]++;
+          $scope.matchesPlayed[nextMatch[1]]++;
+        }
         matchesRemaining[matchesRemainingIndex] = null
       }
     }
@@ -72,5 +85,9 @@ function ScheduleController($scope) {
       array[j] = temp;
     }
     return array;
+  };
+
+  var exceededMaxMatches = function (index) {
+    return $scope.matchesPlayed[index] >= $scope.maxMatches
   };
 }
