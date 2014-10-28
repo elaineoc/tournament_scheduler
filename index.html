@@ -1,0 +1,31 @@
+<!doctype html>
+<html ng-app>
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+</head>
+<body>
+<div ng-controller="ScheduleController">
+  Number of players:<input type="number" ng-model="playerCount" placeholder="0">
+  Number of courts available:<input type="number" ng-model="courtCount" placeholder="0">
+  <br/>
+  <button ng-click="generate()" class="button">Generate Schedule</button>
+  <br/>
+  Schedule:
+
+  <ul class="example-animate-container">
+    <li class="animate-repeat" ng-repeat="matches in rounds">
+      ROUND {{$index + 1}}
+
+      <ul class="example-animate-container">
+        <li ng-repeat="match in matches">
+          {{match[0]}} -vs- {{match[1]}}
+        </li>
+      </ul>
+    </li>
+  </ul>
+
+</div>
+</body>
+</html>
+
+<script src="scheduleController.js"></script>
